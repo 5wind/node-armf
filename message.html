@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学生管理系统</title>
+    <style>
+       html{
+           background: url('./img/2008661389672_2.jpg') center center;
+           background-size: 110%;
+       }
+        .all{
+            width: 100%;
+            height: 100%;
+            margin:50px;
+        }
+        .box{
+            margin:50px;
+        }
+
+        .title{
+            font-size: 30px;
+            color: black;
+            text-align: center;
+        }
+        input{
+            width:100px;
+            height: 30px;
+            border:1px solid #ef4300;
+            outline: none;
+
+
+        }
+        button{
+            width:100px;
+            height: 30px;
+            border:1px solid #ef4300;
+            outline: none;
+            background: orangered;
+        }
+
+    </style>
+    <script src="js/jquery-1.4.2.min.js"></script>
+
+
+</head>
+<body>
+
+<div class="title">学生管理系统</div>
+<div class="all">
+    姓名：<input type="text" name="name" class="name">
+    学号：<input type="text" name="number" class="number">
+    班级：<input type="text" name="classroom" class="classroom">
+    <button class="btn">添加</button>
+
+</div>
+<div class="box">
+
+</div>
+
+<script src="js/doT.min.js"></script>
+<script type="text/doT" class="abc">
+			{{~it:item}}
+
+			<div class="list">
+
+			姓名: <input type="text" value="{{=item.name}}" oldvalue="{{=item.name}}" class="nametwo" name="nametwo" name="two">
+			学号: <input type="text" value="{{=item.number}}" oldvalue="{{=item.number}}" class="numberone" name="numberone" name="one">
+            班级: <input type="text" value="{{=item.classroom}}" oldvalue="{{=item.classroom}}" class="classname" name="classroomone" name="three">
+            <button class="modify">修改</button>
+            <button class="delete">删除</button>
+            </div>
+
+			{{~}}
+</script>
+<script>
+    $(function(){
+        xuanr();
+        $('.btn').click(function(){
+
+            var dataone={
+                name:$('.name').val(),
+                number:$('.number').val(),
+                classroom:$('.classroom').val()
+            }
+            console.log($('.name').val());
+            console.log($('.number').val());
+            var name=$('.name').val();
+            var number=$('.number').val();
+            var classroom=$('.classroom').val();
+
+            $.post('http://127.0.0.1:3000/message',dataone,function(data){
+                xuanr();
+
+                /*var str='<div class="list">姓名:' +
+                        '<input type="text" value="'+name+'" oldvalue="'+name+'" class="nametwo" name="nametwo" name="two">' +
+                        ' 学号: <input type="text" value="'+number+'" oldvalue="'+number+'"  class="numberone" name="numberone" name="one">' +
+                        '班级: <input type="text" value="'+classroom+'" oldvalue="'+classroom+'" class="classname" name="classroomone" name="three">' +
+                        '<button class="modify">修改</button>' +
+                        '<button class="delete">删除</button>
+                        </div>';
+
+
+
+
+                $('.box').append(str);*/
+                console.log(data)
+
+            });
+
+
+        });
+        function clickModify() {
+
+
+            $('.modify').click(function () {
+
+                    var nametwo=$(this).parent().find('.nametwo').attr("oldvalue");
+                    var numberone=$(this).parent().find('.numberone').attr("oldvalue");
+                    var classname=$(this).parent().find('.classname').attr("oldvalue");
+                    console.log(classname);
+                    console.log(nametwo);
+                    $(this).parent().find('.nametwo').attr('oldvalue',$('.nametwo').val());
+                    $(this).parent().find('.numberone').attr('oldvalue',$('.numberone').val());
+                    $(this).parent().find('.classname').attr('oldvalue',$('.classname').val());
+                    console.log(nametwo);
+                    var dataone = {
+                        two:nametwo,
+                        one:numberone,
+                        three:classname
+
+                    }
+
+                    console.log(dataone);
+
+
+                    var data = {
+                        nametwo:$(this).parent().find('.nametwo').val(),
+                        numberone: $(this).parent().find('.numberone').val(),
+                        classroomone: $(this).parent().find('.classname').val()
+                    }
+                    console.log(nametwo);
+
+
+
+
+                    console.log(data);
+                    $.post('http://127.0.0.1:3000/modify', dataone,function (data) {
+                        console.log(data);
+                    })
+                    $.post('http://127.0.0.1:3000/modify', data,function (data) {
+
+                        console.log(data);
+                    })
+
+                })
+
+
+
+
+
+
+
+
+
+
+        }
+
+        function change(){
+            $(document).ready(function(){
+                $('.all input').change(function(){
+                    var data={
+                        name:$(this).parent().find('.name').val(),
+                        number:$(this).parent().find('.number').val(),
+                        classroom:$(this).parent().find('.classroom').val()
+                    }
+
+                    $.post('http://127.0.0.1:3000/search',data,function(data){
+                        if(data.length==1){
+                            var str='<div class="list">姓名:' +
+                                    '<input type="text" value="'+data[0].name+'" oldvalue="'+data[0].name+'" class="nametwo" name="nametwo" name="two">' +
+                                    ' 学号: <input type="text" value="'+data[0].number+'" oldvalue="'+data[0].number+'"  class="numberone" name="numberone" name="one">' +
+                                    '班级: <input type="text" value="'+data[0].classroom+'" oldvalue="'+data[0].classroom+'" class="classname" name="classroomone" name="three">' +
+                                    '<button class="modify">修改</button>' +'&nbsp;'+
+                                    '<button class="delete">删除</button>' +
+                                    '</div>';
+                            $('.box').html(str);
+                            console.log(data[0].name);
+                            console.log(data);
+                        }else{
+                            $('.box').html('');
+                            console.log(data);
+                        }
+                        $('.delete').click(function (){
+                            var data = {
+                                name: $(this).parent().find('.nametwo').val(),
+                                number: $(this).parent().find('.numberone').val(),
+                                classroom: $(this).parent().find('.classname').val()
+                            }
+                            console.log($(this).parent('.list'));
+                            $(this).parent().remove();
+                            $.post('http://127.0.0.1:3000/delete', data, function (data) {
+                                $(this).parent().remove();
+                                console.log(data);
+
+
+                            })
+                        })
+                        $('.modify').click(function () {
+
+                            var nametwo=$(this).parent().find('.nametwo').attr("oldvalue");
+                            var numberone=$(this).parent().find('.numberone').attr("oldvalue");
+                            var classname=$(this).parent().find('.classname').attr("oldvalue");
+                            console.log(classname);
+                            console.log(nametwo);
+                            $(this).parent().find('.nametwo').attr('oldvalue',$('.nametwo').val());
+                            $(this).parent().find('.numberone').attr('oldvalue',$('.numberone').val());
+                            $(this).parent().find('.classname').attr('oldvalue',$('.classname').val());
+                            console.log(nametwo);
+                            var dataone = {
+                                two:nametwo,
+                                one:numberone,
+                                three:classname
+
+                            }
+
+                            console.log(dataone);
+
+
+                            var data = {
+                                nametwo:$(this).parent().find('.nametwo').val(),
+                                numberone: $(this).parent().find('.numberone').val(),
+                                classroomone: $(this).parent().find('.classname').val()
+                            }
+                            console.log(nametwo);
+
+
+
+
+                            console.log(data);
+                            $.post('http://127.0.0.1:3000/modify', dataone,function (data) {
+                                console.log(data);
+                            })
+                            $.post('http://127.0.0.1:3000/modify', data,function (data) {
+
+                                console.log(data);
+                            })
+
+                        })
+
+
+
+
+
+
+
+
+
+                    })
+
+                })
+            })
+
+
+        }
+
+
+    function  clickDel() {
+        $('.delete').click(function (){
+            var data = {
+                name: $(this).parent().find('.nametwo').val(),
+                number: $(this).parent().find('.numberone').val(),
+                classroom: $(this).parent().find('.classname').val()
+            }
+            console.log($(this).parent('.list'));
+            $(this).parent().remove();
+            $.post('http://127.0.0.1:3000/delete', data, function (data) {
+                $(this).parent().remove();
+                console.log(data);
+
+
+            })
+        })
+    }
+        /*$('.btntwo').click(function(){
+            $.get('http://127.0.0.1:3000/message',function(data){
+                var list=data;
+                var ht=doT.template($('.abc').html());
+                var str=ht(list);
+                $('.box').html(str);
+            })
+        })*/
+
+        function xuanr(){
+            $.get('http://127.0.0.1:3000/alist',function(data){
+                var list=data;
+                var ht=doT.template($('.abc').html());
+                var str=ht(list);
+                $('.box').html(str);
+                clickDel();
+                clickModify();
+                change();
+            })
+        }
+
+
+    })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆</title>
+    <script src="js/jquery-1.4.2.min.js"></script>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            border:0;
+        }
+        html,body{
+            width:100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+
+        }
+        body{
+            background: url('./img/1.jpg') no-repeat;
+            background-size: 100%;
+        }
+        div{
+            position:fixed;
+            left: 40%;
+            top:28%;
+
+        }
+        input {
+            width: 270px;
+            height: 42px;
+            margin-top: 25px;
+            padding: 0 15px;
+            background: #2d2d2d; /* browsers that don't support rgba */
+            background: rgba(45,45,45,.15);
+            -moz-border-radius: 6px;
+            -webkit-border-radius: 6px;
+            border-radius: 6px;
+            border: 1px solid #3d3d3d; /* browsers that don't support rgba */
+            border: 1px solid rgba(255,255,255,.15);
+            -moz-box-shadow: 0 2px 3px 0 rgba(0,0,0,.1) inset;
+            -webkit-box-shadow: 0 2px 3px 0 rgba(0,0,0,.1) inset;
+            box-shadow: 0 2px 3px 0 rgba(0,0,0,.1) inset;
+            font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,.1);
+            -o-transition: all .2s;
+            -moz-transition: all .2s;
+            -webkit-transition: all .2s;
+            -ms-transition: all .2s;
+        }
+        button {
+            cursor: pointer;
+            width: 300px;
+            height: 44px;
+            margin-top: 25px;
+            padding: 0;
+            background: #ef4300;
+            -moz-border-radius: 6px;
+            -webkit-border-radius: 6px;
+            border-radius: 6px;
+            border: 1px solid #ff730e;
+            -moz-box-shadow:
+                    0 15px 30px 0 rgba(255,255,255,.25) inset,
+                    0 2px 7px 0 rgba(0,0,0,.2);
+            -webkit-box-shadow:
+                    0 15px 30px 0 rgba(255,255,255,.25) inset,
+                    0 2px 7px 0 rgba(0,0,0,.2);
+            box-shadow:
+                    0 15px 30px 0 rgba(255,255,255,.25) inset,
+                    0 2px 7px 0 rgba(0,0,0,.2);
+            font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,.1);
+            -o-transition: all .2s;
+            -moz-transition: all .2s;
+            -webkit-transition: all .2s;
+            -ms-transition: all .2s;
+        }
+
+    </style>
+</head>
+<body>
+<div>
+
+    用户名：<input type="text" name="name" class="name"><br>
+    密&nbsp;&nbsp;&nbsp;码：<input type="password" name="password" class="password"><br>
+    <button class="btn">登陆</button>
+</div>
+</body>
+<script>
+    $(function(){
+
+        $('.btn').click(function(){
+
+            var dataone={
+                name:$('.name').val(),
+                password:$('.password').val()
+            }
+            $.post('http://127.0.0.1:3000/login',dataone,function(data){
+                var name=$('.name').val();
+                console.log(data);
+                console.log(name);
+                console.log(data.length);
+                if(data.length==1){
+                    window.open('./message.html')
+                }else{
+                    alert("你还没有注册");
+                }
+            })
+        })
+
+    })
+
+</script>
+</html>
